@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> <!-- include socket.io client side script -->
+
+<script>
+
+var socket = io(); //load socket.io-client and connect to the host that serves the page
+window.addEventListener("load", function(){ //when page loads
+    var timebox = document.getElementById("time"); 
+    timebox.addEventListener("change", function() { //add event listener for when checkbox changes
+        socket.emit("time", this.value); //send button status to server (as 1 or 0)
+    });
+    var sleepButton = document.getElementById("button");
+    sleepButton.addEventListener("click", function() { //add event listener for when checkbox changes
+        socket.emit("button", 1); //send button status to server (as 1 or 0)
+    });
+});
+
+socket.on('time', function (data) { //get button status from client
+    document.getElementById("time").value = data; //change checkbox according to push button on Raspberry Pi
+    socket.emit("time", data); //send push button status to back to server
+});
+
+socket.on('button', function (data) { //get button status from client
+    document.getElementById("button").value = data; //change checkbox according to push button on Raspberry Pi
+    socket.emit("button", data); //send push button status to back to server
+});
+
+</script>
+
+<h1>Alarm Clock</h1>
+<p>
+<input type="time" id="time" value="09:00">
+<input type="button" id="button" value="Sleep!">
+</p>
+</body>
+</html>
