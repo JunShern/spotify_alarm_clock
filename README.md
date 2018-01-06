@@ -1,7 +1,7 @@
 # spotify_alarm_clock
 Script + webserver to control a Spotify alarm clock.
 
-*This hobby project is provided with no guarantee so use at your own risk*
+***This hobby project is provided with no guarantee; use at your own risk.***
 
 ### Prerequisites
 - [Spotify for Linux](https://www.spotify.com/download/linux) - Premium account recommended
