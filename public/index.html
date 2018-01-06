@@ -5,6 +5,7 @@
 
 <script>
 
+var alarmOn = 0; // Alarm state on/off
 var socket = io(); //load socket.io-client and connect to the host that serves the page
 window.addEventListener("load", function(){ //when page loads
     var timebox = document.getElementById("time"); 
@@ -15,16 +16,28 @@ window.addEventListener("load", function(){ //when page loads
     sleepButton.addEventListener("click", function() { //add event listener for when checkbox changes
         socket.emit("button", 1); //send button status to server (as 1 or 0)
     });
+    var alarmOnCheckbox = document.getElementById("alarmOn");
+    alarmOnCheckbox.addEventListener("change", function() { //add event listener for when checkbox changes
+        console.log(alarmOnCheckbox.checked);
+        socket.emit("alarmOn", alarmOnCheckbox.checked); //send button status to server (as 1 or 0)
+    });
 });
 
-socket.on('time', function (data) { //get button status from client
-    document.getElementById("time").value = data; //change checkbox according to push button on Raspberry Pi
-    socket.emit("time", data); //send push button status to back to server
+socket.on('alarmOn', function (data) { //get button status from client
+    alarmOn = data;
+    var alarmOnCheckbox = document.getElementById("alarmOn");
+    alarmOnCheckbox.checked = data;
 });
-
-socket.on('button', function (data) { //get button status from client
-    document.getElementById("button").value = data; //change checkbox according to push button on Raspberry Pi
-    socket.emit("button", data); //send push button status to back to server
+socket.on('console', function (data) { //get button status from client
+    var text;
+    if (alarmOn) {
+        text = "Alarm set for " + data + ", press Sleep! to run alarm";
+    } else {
+        text = "Alarm not set.";
+    }
+    var timebox = document.getElementById("time");
+    timebox.value = data; 
+    document.getElementById("console").innerHTML = text; //change checkbox according to push button on Raspberry Pi
 });
 
 </script>
@@ -32,7 +45,9 @@ socket.on('button', function (data) { //get button status from client
 <h1>Alarm Clock</h1>
 <p>
 <input type="time" id="time" value="09:00">
-<input type="button" id="button" value="Sleep!">
+<input type="checkbox" id="alarmOn" value=0>
 </p>
+<p id="console">Alarm not set.</p>
+<input type="button" id="button" value="Sleep!">
 </body>
 </html>

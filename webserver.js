@@ -17,11 +17,22 @@ function handler (req, res) { //create server
     });
 }
 
+var timevalue = "9:00";
+var alarmOn = 0;
 io.sockets.on('connection', function (socket) {// WebSocket Connection
-    var timevalue = 0; //static variable for current status
+    // Load in values from previous session
+    socket.emit('alarmOn', alarmOn);
+    socket.emit('console', timevalue);
+
     socket.on('time', function(data) { //get time switch status from client
         timevalue = data;
         console.log(timevalue);
+        socket.emit('console', timevalue);
+    });
+    socket.on('alarmOn', function(data) { //get time switch status from client
+        alarmOn = data;
+        socket.emit('alarmOn', alarmOn);
+        socket.emit('console', timevalue);
     });
     socket.on('button', function(data) { //get time switch status from client
         console.log("Running Spotify script!");
