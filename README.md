@@ -23,9 +23,10 @@ chmod u+x install.sh
 ```
 node webserver.js
 ```
-4. Get your machine's IP address <ALARM_IP>
+4. Get your machine's hostname and/or IP address <ALARM_IP>  using
 ```
+hostname
 hostname -I
 ```
-4. Using a device connected to the same local area network, open a browser and go to `http://<ALARM_IP>:8080`.
-5. Select an alarm time and Sleep!. 
+5. Using a device connected to the same local area network, open a browser and go to `http://<hostname>.local:8080` or equivalently, `http://<ALARM_IP>:8080`.
+6. Select an alarm time and Sleep!. 
